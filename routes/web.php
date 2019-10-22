@@ -31,3 +31,11 @@ Route::get('/usuarios/nuevo', function (){
 	return 'Creando nuevo usuario';
 });
 
+Route::get('saludo/{name}/{nickname?}', function ($name, $nickname = null){
+	
+	if ($nickname) {
+			return "Bienvenido {$name}, Tu apodo es {$nickname} ";		
+	}
+	return "Bienvenido {$name}, No tienes apodo ";
+});
+
