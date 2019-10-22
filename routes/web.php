@@ -25,5 +25,9 @@ Route::get('/usuarios', function(){
 
 Route::get('/usuarios/{id}', function($id){
 	return "Mostrando detalle de el usuario: {$id} ";
+})->where('id','[0-9]+');
+
+Route::get('/usuarios/nuevo', function (){
+	return 'Creando nuevo usuario';
 });
 
