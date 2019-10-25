@@ -8,14 +8,18 @@ class UserController extends Controller
 {
     function index()
     {
-        $users = [
-            'Sabrina',
-            'Alfredo',
-            'Bob',
-            'Ted',
-            'Ellie',
-            '<script>alert("Clicker")</script>'
-        ];
+
+        //Mostrar lista de usuarios, unicamente si tenemos usuarios
+        
+        if (request()->has('empty')) {
+            $users = [];
+        } else {
+
+            $users = [
+                'Sabrina','Alfredo','Bob','Ted','Ellie',
+            ];
+        }
+
 
         $tittle = 'listado de usuarios';
 
