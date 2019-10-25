@@ -17,9 +17,9 @@ class UserController extends Controller
             '<script>alert("Clicker")</script>'
         ];
 
-    	return view('Users',[
-            'users' => $users, 
-            'tittle'=> 'Listado de usuarios'
+    	return view('Users')->with([
+             'users' => $users, 
+             'tittle'=> 'Listado de usuarios'
         ]);
     }
     
