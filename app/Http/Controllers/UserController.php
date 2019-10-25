@@ -17,9 +17,10 @@ class UserController extends Controller
             '<script>alert("Clicker")</script>'
         ];
 
-    	return view('Users', 
-            ['users' => $users]
-        );
+    	return view('Users',[
+            'users' => $users, 
+            'tittle'=> 'Listado de usuarios'
+        ]);
     }
     
     function welcome()

@@ -5,12 +5,12 @@
 	<title>Listado de Usuarios Styde.net</title>
 </head>
 <body>
-	<h1>Usuarios</h1>
+	<h1><?= e($tittle) ?></h1>
 
 	<ul>
 		<?php foreach ($users as $user):?>
-			<li><?php echo e($user) ?></li>
-		<?php endforeach;?> 
+			<li><?= e($user) ?></li>
+		<?php endforeach; ?> 
 	</ul>
 </body>
 </html>
