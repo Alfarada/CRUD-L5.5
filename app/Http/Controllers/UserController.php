@@ -19,8 +19,6 @@ class UserController extends Controller
                 'Sabrina','Alfredo','Bob','Ted','Ellie',
             ];
         }
-
-
         $tittle = 'listado de usuarios';
 
     	return view('Users',compact('users','tittle'));
