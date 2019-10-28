@@ -21,9 +21,9 @@ class UsersModuleTest extends TestCase
     /** @test */
     function it_load_the_users_details_page()
     {
-    	$this->get('/usuarios/5')
+    	$this->get('/usuarios/10')
     			->assertStatus(200)
-    			->assertSee('5');
+    			->assertSee('10');
     }
 
      /** @test */

@@ -8,7 +8,6 @@ class UserController extends Controller
 {
     function index()
     {
-
         //Mostrar lista de usuarios, unicamente si tenemos usuarios
         
         if (request()->has('empty')) {
@@ -19,9 +18,9 @@ class UserController extends Controller
                 'Sabrina','Alfredo','Bob','Ted','Ellie',
             ];
         }
-        $tittle = 'listado de usuarios';
+        $title = 'listado de usuarios';
 
-    	return view('Users',compact('users','tittle'));
+    	return view('users.index',compact('users','title'));
     }
     
     function welcome()
@@ -31,7 +30,7 @@ class UserController extends Controller
 
     function show($id)
     {
-    	return "Mostrando detalle de el usuario: {$id} ";
+        return view('users.show', compact('id')); 
     }
 
     function create()
