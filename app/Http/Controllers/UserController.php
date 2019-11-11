@@ -25,9 +25,13 @@ class UserController extends Controller
     	return view('welcome');
     }
 
-    function show($id)
+    function show(User $user)
     {
-        return view('users.show', compact('id')); 
+        //$user = User::findOrFail($id);
+
+        
+
+        return view('users.show', compact('user')); 
     }
 
     function create()

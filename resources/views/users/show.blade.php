@@ -1,12 +1,19 @@
 
 @extends('layout')
 
-@section("title", " Usuario {$id}")
+@section("title", " Usuario {$user->id}") 
 
 @section('content')
-	<h1>Usuario #{{ $id }}</h1>
+	<h1>Usuario #{{ $user->id }}</h1>
 
-	Mostrando detalle de el usuario:{{ $id }} 
+	<p>Nombre : {{ $user->name }} </p> 
+	<p>Correo electrónico : {{ $user->email }} </p>
+
+	<p>
+		<a href="{{ route('users')}} ">Regresar a la lista de usuarios</a>
+	</p>
+
+
 @endsection
 
 

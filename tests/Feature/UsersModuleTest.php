@@ -17,18 +17,7 @@ class UsersModuleTest extends TestCase
     * @test */
     function it_loads_the_users_list_page()
     {
-
-
-        $professionId = Profession::where('title','Desarrollador back-end')->value('id'); 
-
-        factory(User::class)->create([
-            'name'      => 'Alfredo',
-            'email'     =>'sabryrodriguez09@gmail.com',
-            'password'  =>bcrypt('Laravel'),
-            'profession_id' => $professionId, 
-            'is_admin' => true
-        ]);
-
+        
         factory(User::class)->create([
             'name' => 'Bob',
         ]);
@@ -40,17 +29,20 @@ class UsersModuleTest extends TestCase
         $this->get('/usuarios')
         		->assertStatus(200)
         		->assertSee('listado de usuarios')
-                ->assertSee('Alfredo')
                 ->assertSee('Bob')
                 ->assertSee('Ted');
     }
     
     /** @test */
-    function it_load_the_users_details_page()
+    function it_display_the_users_details()
     {
-    	$this->get('/usuarios/10')
+        $user = factory(User::class)->create([
+            'name' => 'Alfredo Yepez'
+        ]);
+
+    	$this->get('/usuarios/'.$user->id) //usuario 5
     			->assertStatus(200)
-    			->assertSee('10');
+    			->assertSee('Alfredo Yepez');
     }
 
     /**
@@ -67,8 +59,17 @@ class UsersModuleTest extends TestCase
      /** @test */
     function it_load_the_new_user_page()
     {
-    	$this->get('/usuarios/nuevo')
-    			->assertStatus(200)
-    			->assertSee('Creando nuevo usuari');
+        $this->get('/usuarios/nuevo')
+                ->assertStatus(200)
+                ->assertSee('Creando nuevo usuario');
+    }
+
+
+     /** @test */
+    function it_displays_a_404_error_if_the_user_is_not_found()
+    {
+    	$this->get('/usuarios/999')
+    			->assertStatus(404)
+    			->assertSee('Página no encontrada');
     }
 }
