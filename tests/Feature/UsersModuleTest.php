@@ -61,9 +61,8 @@ class UsersModuleTest extends TestCase
     {
         $this->get('/usuarios/nuevo')
                 ->assertStatus(200)
-                ->assertSee('Creando nuevo usuario');
+                ->assertSee('Crear Usuario');
     }
-
 
      /** @test */
     function it_displays_a_404_error_if_the_user_is_not_found()
