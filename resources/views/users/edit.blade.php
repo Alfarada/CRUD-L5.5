@@ -4,7 +4,7 @@
 @section("title", " Crear Usuario") 
 
 @section('content')
-	<h1>Crear nuevo Usuario </h1>
+	<h1>Editar Usuario</h1>
 	@if($errors->any())
 	<div class="alert alert-danger">
 		<p><h6>Corrige los siguientes errores</h6></p>
@@ -16,17 +16,17 @@
 	</div>
 	@endif 
 	
-	<form method="POST" action="{{ url('usuarios')}} ">
-	
+	<form method="POST" action="{{ url("usuarios/{$user->id}") }} ">
+		{{ method_field('PUT') }}
 		{!! csrf_field() !!}
 		
 
 		<label for="name">Nombre:</label>
-		<input type="text" name="name" placeholder="Bob Rank" value=" {{ old('name') }} ">
+		<input type="text" name="name" placeholder="Bob" value=" {{ old('name', $user->name) }} ">
 		<br>
 
 		<label for="email">Email:</label>
-		<input type="email" name="email" placeholder="Bob@example.com" value=" {{ old('email') }}">
+		<input type="email" name="email" placeholder="Bob@example.com" value=" {{ old('email', $user->email) }}">
 		<br>
 		
 		<label for="password">Contraseña:</label>
@@ -34,7 +34,7 @@
 		<br>
 
 		<button type="submit">
-			Crear Usuario
+			Actualizar Usuario
 		</button>
 	</form>
 	<p>
