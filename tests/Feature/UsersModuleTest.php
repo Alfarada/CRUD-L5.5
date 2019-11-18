@@ -218,8 +218,6 @@ class UsersModuleTest extends TestCase
     /** @test */
     function the_name_is_required_when_update_the_user()
     {
-        
-
         $user = factory(User::class)->create();
 
         $this->from("usuarios/{$user->id}/editar")
@@ -238,7 +236,6 @@ class UsersModuleTest extends TestCase
     
      function the_email_most_be_valid_when_updating_the_user()
      {
- 
         $user = factory(User::class)->create();
 
         $this->from("usuarios/{$user->id}/editar")
@@ -257,9 +254,9 @@ class UsersModuleTest extends TestCase
      
      function the_email_most_be_unique_when_updating_the_user()
      {
-        self::markTestIncomplete();
-
-        return;
+        factory(User::class)->create([
+            'email' => 'existing-email@example.com',
+        ]);
 
         $user = factory(User::class)->create([
              'email' => 'sabryrodriguez@gmail.com'
@@ -268,12 +265,12 @@ class UsersModuleTest extends TestCase
         $this->from("usuarios/{$user->id}/editar ")
              ->put("usuarios/{$user->id}", [
              'name' => 'Alfredo',
-             'email' => 'sabryrodriguez@gmail.com',
+             'email' => 'existing-email@example.com',
              'password' => '123456'
-        ])->assertRedirect('usuarios/nuevo')
+        ])->assertRedirect("usuarios/{$user->id}/editar ")
            ->assertSessionHasErrors(['email']);
  
-        $this->assertEquals(1,User::count());
+        //
      }
  
      /** @test */
@@ -301,7 +298,28 @@ class UsersModuleTest extends TestCase
         ]);
      }
  
+      /** @test */
      
+      function the_users_email_can_stay_the_same_when_updating_the_user()
+      {
+ 
+         $user = factory(User::class)->create([
+             'email' => 'sabryrodriguez@gmail.com'
+         ]);
+ 
+         $this->from("usuarios/{$user->id}/editar")
+             ->put("usuarios/{$user->id}", [
+              'name' => 'Jesus Yepez',
+              'email' => 'sabryrodriguez@gmail.com',
+              'password' => '12345678'
+         ])
+         ->assertRedirect("usuarios/{$user->id}"); //(users.show)
+  
+         $this->assertDatabaseHas('users', [
+             'name' => 'Jesus Yepez',
+             'email' => 'sabryrodriguez@gmail.com'
+         ]);
+      }
 
     
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use Illuminate\Support\Facades\DB;
 use App\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -69,7 +70,7 @@ class UserController extends Controller
     {
         $data = request()->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => ['required','email', Rule::unique('users')->ignore($user->id)],
             'password' => '',
         ]);
 
