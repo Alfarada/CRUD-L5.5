@@ -37,3 +37,5 @@ Route::get('/usuarios/{user}/editar', 'UserController@edit')
 
 Route::put('/usuarios/{user}', 'UserController@update');
 
+Route::delete('/usuarios/{user}', 'UserController@destroy');
+
