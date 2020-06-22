@@ -2,8 +2,10 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -41,8 +43,14 @@ class User extends Authenticatable
         return $this->belongsTo(Model\Profession::class);
     }
 
+    public function profile()
+    {
+        return $this->HasOne(UserProfile::class);
+    }
+
     public function isAdmin()
     {
         return $this->is_admin;
     }
+
 }
