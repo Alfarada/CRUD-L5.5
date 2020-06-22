@@ -26,16 +26,17 @@ Route::get('/usuarios/{user}','UserController@show')
 		->name('users.show');
 
 Route::get('/usuarios/nuevo','UserController@create')
-	->name('users.create');
+		->name('users.create');
 
 Route::post('/usuarios', 'UserController@store');
 
 Route::get('saludo/{name}/{nickname?}','WelcomeUserController@index');
 
 Route::get('/usuarios/{user}/editar', 'UserController@edit')
-	->name('users.edit');
+		->name('users.edit');
 
 Route::put('/usuarios/{user}', 'UserController@update');
 
-Route::delete('/usuarios/{user}', 'UserController@destroy');
+Route::delete('/usuarios/{user}', 'UserController@destroy')
+		->name('users.destroy');
 
