@@ -77,13 +77,8 @@ class UsersModuleTest extends TestCase
     {   
         $this->withoutExceptionHandling();
         
-        $this->post('/usuarios/', [
-            'name' => 'Alfredo',
-            'email' => 'sabryrodriguez@gmail.com',
-            'password' => '123456',
-            'bio' => 'Programador de laravel y Vue',
-            'twitter' => 'https://twitter.com/silecnce'
-        ])->assertRedirect('usuarios');
+        $this->post('/usuarios/', $this->getValidData())
+            ->assertRedirect('usuarios');
 
         $this->assertCredentials([
             'name' => 'Alfredo',
@@ -99,58 +94,68 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
+    //El campo twitter es opcional
+
+    function the_twitter_field_is_optional()
+    {   
+        $this->withoutExceptionHandling();
+        
+        $this->post('/usuarios/', $this->getValidData([
+            'twitter' => null
+        ]))->assertRedirect('usuarios');
+
+        $this->assertCredentials([
+            'name' => 'Alfredo',
+            'email' => 'sabryrodriguez@gmail.com',
+            'password' => '123456'
+        ]);
+
+        $this->assertDatabaseHas('user_profiles', [
+            'bio' => 'Programador de laravel y Vue',
+            'twitter' => null ,
+            'user_id' => User::findByEmail('sabryrodriguez@gmail.com')->id
+        ]);
+    }
+
+    /** @test */
 
     function the_name_is_required()
     {
-        //$this->withoutExceptionHandling();
-
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-            'name' => '',
-            'email' => 'sabryrodriguez@gmail.com',
-            'password' => '123456'
-        ])->assertRedirect('usuarios/nuevo')
-          ->assertSessionHasErrors(['name' => 'El campo  name obligatorio']);
+            ->post('/usuarios/', $this->getValidData([
+                'name' => ''
+            ]))->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['name' => 'El campo  name obligatorio']);
 
-//        $this->assertDatabaseMissing('users', [
-//            'email' => 'sabryrodriguez@gmail.com',
-//        ]);
-
-          $this->assertEquals(0,User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
     /** @test */
 
     function the_email_is_required()
     {
-        //$this->withoutExceptionHandling();
-
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-            'name' => 'Alfredo',
-            'email' => '',
-            'password' => '123456'
-        ])->assertRedirect('usuarios/nuevo')
-          ->assertSessionHasErrors(['email']);
+            ->post('/usuarios/', $this->getValidData([
+                'email' => ''
+            ]))
+            ->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['email']);
 
-          $this->assertEquals(0,User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
      /** @test */
     
     function the_email_most_be_valid()
     {
-        //$this->withoutExceptionHandling();
-
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-            'name' => 'Alfredo',
-            'email' => 'correo-no-valido',
-            'password' => '123456'
-        ])->assertRedirect('usuarios/nuevo')
-          ->assertSessionHasErrors(['email']);
+            ->post('/usuarios/', $this->getValidData([
+                'email' => 'correo-no-valido'
+            ]))
+            ->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['email']);
 
-          $this->assertEquals(0,User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
      /** @test */
@@ -162,12 +167,11 @@ class UsersModuleTest extends TestCase
         ]);
 
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-            'name' => 'Alfredo',
-            'email' => 'sabryrodriguez@gmail.com',
-            'password' => '123456'
-        ])->assertRedirect('usuarios/nuevo')
-          ->assertSessionHasErrors(['email']);
+            ->post('/usuarios/', $this->getValidData([
+                'email' => 'sabryrodriguez@gmail.com'
+            ]))
+            ->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['email']);
 
           $this->assertEquals(1,User::count());
     }
@@ -176,17 +180,13 @@ class UsersModuleTest extends TestCase
     
     function the_password_is_required()
     {
-        //$this->withoutExceptionHandling();
-
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-            'name' => 'Alfredo',
-            'email' => 'sabryrodriguez@gmail.com',
-            'password' => ''
-        ])->assertRedirect('usuarios/nuevo')
-          ->assertSessionHasErrors(['password']);
+            ->post('/usuarios/', $this->getValidData([
+                'password' => ''
+            ]))->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['password']);
 
-          $this->assertEquals(0,User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
     /** @test */
@@ -279,8 +279,6 @@ class UsersModuleTest extends TestCase
              'password' => '123456'
         ])->assertRedirect("usuarios/{$user->id}/editar ")
            ->assertSessionHasErrors(['email']);
- 
-        //
      }
  
      /** @test */
@@ -323,7 +321,7 @@ class UsersModuleTest extends TestCase
               'email' => 'sabryrodriguez@gmail.com',
               'password' => '12345678'
          ])
-         ->assertRedirect("usuarios/{$user->id}"); //(users.show)
+         ->assertRedirect("usuarios/{$user->id}");
   
          $this->assertDatabaseHas('users', [
              'name' => 'Jesus Yepez',
@@ -345,10 +343,17 @@ class UsersModuleTest extends TestCase
         $this->assertDatabaseMissing('users' , [
             'id' => $user->id
         ]);
-
-        //$this->assertSame(0 , User::count());
     }
 
-    
+    protected function getValidData (array $custom = [])
+    {
+        return array_filter(array_merge([
+            'name' => 'Alfredo',
+            'email' => 'sabryrodriguez@gmail.com',
+            'password' => '123456',
+            'bio' => 'Programador de laravel y Vue',
+            'twitter' => 'https://twitter.com/silecnce'
+        ], $custom));
+    }
 
 }
