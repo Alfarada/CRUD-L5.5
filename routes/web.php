@@ -14,10 +14,6 @@
 Route::get('/', 'UserController@welcome')
 	->name('welcome');
 
-/*Route::get('/', function () {
-    return 'Hola mundo!';
-});*/
-
 Route::get('/usuarios', 'UserController@index')
 	->name('users.index'); 
 

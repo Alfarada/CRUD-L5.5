@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\{User};
 use App\Http\Requests\CreateUserRequest;
+use App\Model\Profession;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -29,7 +30,9 @@ class UserController extends Controller
 
     function create()
     {
-        return view('users.create');
+        $professions = Profession::orderBy('title', 'ASC')->get();
+
+        return view('users.create', compact('professions'));
     }
 
     function store(CreateUserRequest $request)

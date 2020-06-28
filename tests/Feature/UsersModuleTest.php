@@ -58,10 +58,15 @@ class UsersModuleTest extends TestCase
 
     /** @test */
     function it_load_the_new_user_page()
-    {
+    {   
+        $profession = factory(Profession::class)->create();
+
         $this->get('/usuarios/nuevo')
             ->assertStatus(200)
-            ->assertSee('Crear Usuario');
+            ->assertSee('Crear Usuario')
+            ->assertViewHas('professions', function ($professions) use ($profession) {
+                return $professions->contains($profession);
+            });
     }
 
     /** @test */
@@ -83,14 +88,14 @@ class UsersModuleTest extends TestCase
         $this->assertCredentials([
             'name' => 'Alfredo',
             'email' => 'sabryrodriguez@gmail.com',
-            'password' => '123456',
-            'profession_id' => $this->profession->id
+            'password' => '123456',  
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
             'bio' => 'Programador de laravel y Vue',
             'twitter' => 'https://twitter.com/silecnce',
-            'user_id' => User::findByEmail('sabryrodriguez@gmail.com')->id
+            'user_id' => User::findByEmail('sabryrodriguez@gmail.com')->id,
+            'profession_id' => $this->profession->id
         ]);
     }
 
@@ -101,7 +106,7 @@ class UsersModuleTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->post('/usuarios/', $this->getValidData([
+        $this->post('/usuarios', $this->getValidData([
             'twitter' => null
         ]))->assertRedirect('usuarios');
 
@@ -131,13 +136,13 @@ class UsersModuleTest extends TestCase
         $this->assertCredentials([
             'name' => 'Alfredo',
             'email' => 'sabryrodriguez@gmail.com',
-            'password' => '123456',
-            'profession_id' => null,
+            'password' => '123456'
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
             'bio' => 'Programador de laravel y Vue',
-            'user_id' => User::findByEmail('sabryrodriguez@gmail.com')->id
+            'user_id' => User::findByEmail('sabryrodriguez@gmail.com')->id,
+            'profession_id' => null
         ]);
     }
 
@@ -214,7 +219,8 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function the_profession_must_be_valid()
+    function 
+    the_profession_must_be_valid()
     {
         $this->withExceptionHandling();
 
