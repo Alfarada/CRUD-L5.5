@@ -71,17 +71,36 @@
 			<h5> Habilidades </h5>
 
 			@foreach ($skills as $skill)
-				<div class="form-check form-check-inline">
-					<input 	name="skills[{{ $skill->id }}]"
-							class="form-check-input"
-							type="checkbox" id="skill_{{ $skill->id }}" 
-							value=" {{ $skill->id }}"
-							{{ old( "skills.{$skill->id}" ) ? 'checked' : '' }}>
-					<label class="form-check-label" for="skill_{{ $skill->id }}"> {{ $skill->name }} </label>
-				</div>
+			<div class="form-check form-check-inline">
+				<input 	name="skills[{{ $skill->id }}]"
+						class="form-check-input"
+						type="checkbox"
+						id="skill_{{ $skill->id }}"
+						value="{{ $skill->id }}"
+						{{ old( "skills.{$skill->id}" ) ? 'checked' : '' }}>
+				<label class="form-check-label" for="skill_{{ $skill->id }}"> {{ $skill->name }} </label>
+			</div>
 			@endforeach
 
 			<!-- EndCheckboxs -->
+
+			<!-- Radio buttons -->
+
+			<h5 class="mt-2">Rol</h5>
+
+			@foreach ($roles as $role => $name)
+				<div class="form-check form-check-inline">
+					<input 	class="form-check-input"
+							type="radio"
+							name="role"
+							id="role_{{ $role }}"
+							value="{{ $role }}"
+							{{ old( "role" ) == $role ? 'checked' : '' }}>
+					<label class="form-check-label" for="role_{{ $role }}"> {{ $name }} </label>
+				</div>
+			@endforeach
+
+			<!-- Radio buttons -->
 
 			<div class="form-group mt-4">
 				<button type="submit" class="btn btn-primary">

@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'name'      => 'Alfredo Yepez',
             'email'     =>'sabryrodriguez09@gmail.com',
             'password'  =>bcrypt('Laravel'),
-            'is_admin' => true
+            'role' => 'admin'
         ]);
 
         $user->profile()->create([

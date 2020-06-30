@@ -104,6 +104,7 @@ class UsersModuleTest extends TestCase
             'name' => 'Alfredo',
             'email' => 'sabryrodriguez@gmail.com',
             'password' => '123456',
+            'role' => 'user'
         ]);
 
         $user = User::findByEmail('sabryrodriguez@gmail.com');
@@ -155,14 +156,44 @@ class UsersModuleTest extends TestCase
         ]);
     }
 
-    /**@test */
+    /** @test */
+
+    function the_role_field_is_optional()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->post('/usuarios', $this->getValidData([
+            'role' => null
+        ]))->assertRedirect('usuarios');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'sabryrodriguez@gmail.com',
+            'role' => 'user'
+        ]);
+    }
+
+    /** @test */
+
+    function the_role_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+
+        $this->post('/usuarios', $this->getValidData([
+            'role' => 'invalid-role'
+        ]))->assertSessionHasErrors('role');
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+
+    /** @test */
 
     function the_profession_id_field_is_optional()
     {
         $this->withoutExceptionHandling();
 
         $this->post('/usuarios/', $this->getValidData([
-            'profession_id' => null
+            'profession_id' => '',
         ]))->assertRedirect('usuarios');
 
         $this->assertCredentials([
@@ -477,13 +508,14 @@ class UsersModuleTest extends TestCase
     {
         $this->profession = factory(Profession::class)->create();
 
-        return array_filter(array_merge([
+        return array_merge([
             'name' => 'Alfredo',
             'email' => 'sabryrodriguez@gmail.com',
             'password' => '123456',
             'profession_id' => $this->profession->id,
             'bio' => 'Programador de laravel y Vue',
-            'twitter' => 'https://twitter.com/silecnce'
-        ], $custom));
+            'twitter' => 'https://twitter.com/silecnce',
+            'role' => 'user'
+        ], $custom);
     }
 }

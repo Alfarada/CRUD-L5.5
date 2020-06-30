@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');     //VARCHAR
             $table->string('email')->unique();  //VARCHAR-UNIQUE  
             $table->string('password');
-            $table->boolean('is_admin')->default(false);
+            $table->string('role');
             $table->rememberToken();
             $table->timestamps(); 
         });
