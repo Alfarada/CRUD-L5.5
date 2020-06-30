@@ -41,7 +41,7 @@ class UsersModuleTest extends TestCase
             'name' => 'Alfredo Yepez'
         ]);
 
-        $this->get('/usuarios/' . $user->id) //usuario 5
+        $this->get('/usuarios/' . $user->id)
             ->assertStatus(200)
             ->assertSee('Alfredo Yepez');
     }
@@ -59,7 +59,7 @@ class UsersModuleTest extends TestCase
 
     /** @test */
     function it_loads_the_new_user_page()
-    {   
+    {
         $this->withoutExceptionHandling();
 
         $profession = factory(Profession::class)->create();
@@ -73,7 +73,7 @@ class UsersModuleTest extends TestCase
             ->assertViewHas('professions', function ($professions) use ($profession) {
                 return $professions->contains($profession);
             })
-            ->assertViewHas('skills', function($skills) use ($skillA, $skillB) {
+            ->assertViewHas('skills', function ($skills) use ($skillA, $skillB) {
                 return $skills->contains($skillA) && $skills->contains($skillB);
             });
     }
@@ -91,20 +91,43 @@ class UsersModuleTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $this->post('/usuarios/', $this->getValidData())
+        $skillA = factory(Skill::class)->create();
+        $skillB = factory(Skill::class)->create();
+        $skillC = factory(Skill::class)->create();
+
+        $this->post('/usuarios/', $this->getValidData([
+            'skills' => [$skillA->id, $skillB->id]
+        ]))
             ->assertRedirect('usuarios');
 
         $this->assertCredentials([
             'name' => 'Alfredo',
             'email' => 'sabryrodriguez@gmail.com',
-            'password' => '123456',  
+            'password' => '123456',
         ]);
+
+        $user = User::findByEmail('sabryrodriguez@gmail.com');
 
         $this->assertDatabaseHas('user_profiles', [
             'bio' => 'Programador de laravel y Vue',
             'twitter' => 'https://twitter.com/silecnce',
-            'user_id' => User::findByEmail('sabryrodriguez@gmail.com')->id,
+            'user_id' => $user->id,
             'profession_id' => $this->profession->id
+        ]);
+
+        $this->assertDatabaseHas('user_skill', [
+            'user_id' => $user->id,
+            'skill_id' => $skillA->id
+        ]);
+
+        $this->assertDatabaseHas('user_skill', [
+            'user_id' => $user->id,
+            'skill_id' => $skillB->id
+        ]);
+
+        $this->assertDatabaseMissing('user_skill', [
+            'user_id' => $user->id,
+            'skill_id' => $skillC->id
         ]);
     }
 
@@ -228,8 +251,7 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
-    function 
-    the_profession_must_be_valid()
+    function the_profession_must_be_valid()
     {
         $this->withExceptionHandling();
 
@@ -245,7 +267,7 @@ class UsersModuleTest extends TestCase
 
     /** @test */
     function only_not_deleted_professions_can_be_selected()
-    {   
+    {
         $deletedProfession = factory(Profession::class)->create([
             'deleted_at' => now()->format('Y-m-d')
         ]);
@@ -262,6 +284,38 @@ class UsersModuleTest extends TestCase
         $this->assertDatabaseEmpty('users');
     }
 
+    /** @test */
+    function the_skills_must_be_an_array()
+    {
+        $this->handleValidationExceptions();
+
+        $this->from('usuarios/nuevo')
+            ->post('/usuarios/', $this->getValidData([
+                'skills' => 'PHP, JS'
+            ]))
+            ->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['skills']);
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+    /** @test */
+    function the_skills_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+
+        $skillA = factory(Skill::class)->create();
+        $skillB = factory(Skill::class)->create();
+
+        $this->from('usuarios/nuevo')
+            ->post('/usuarios/', $this->getValidData([
+                'skills' => [$skillA->id, $skillB->id + 1]
+            ]))
+            ->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['skills']);
+
+        $this->assertDatabaseEmpty('users');
+    }
 
     /** @test */
     function it_load_the_edit_user_page()

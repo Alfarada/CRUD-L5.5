@@ -2,10 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -36,6 +34,11 @@ class User extends Authenticatable
     public static function findByEmail($email)
     {
         return static::where(compact('email'))->first();
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'user_skill');
     }
 
     public function profession()
