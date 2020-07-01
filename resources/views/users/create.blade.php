@@ -5,9 +5,9 @@
 @section('content')
 
 <div class="card">
-	<h2 class="card-header">
-		Crear Usuario
-	</h2>
+	<h4 class="card-header">
+		Crear usuario
+	</h4>
 	<div class="card-body">
 
 		@if($errors->any())
