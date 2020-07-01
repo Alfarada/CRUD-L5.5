@@ -33,6 +33,6 @@ class CreateUserSkillTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_skills');
+        Schema::dropIfExists('user_skill');
     }
 }

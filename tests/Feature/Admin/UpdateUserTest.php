@@ -188,6 +188,9 @@ class UpdateUserTest extends TestCase
     /** @test */
     function it_load_the_edit_user_page()
     {
+
+        $this->withoutExceptionHandling();
+        
         $user = factory(User::class)->create();
 
         $this->get("/usuarios/{$user->id}/editar")
