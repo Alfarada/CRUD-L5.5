@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateSkillsTable extends Migration
 {
@@ -27,6 +28,12 @@ class CreateSkillsTable extends Migration
      */
     public function down()
     {
+        //DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        //    Schema::dropIfExists();
+        //DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('skills');
+        Schema::enableForeignKeyConstraints();
+
     }
 }

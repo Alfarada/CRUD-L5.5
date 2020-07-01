@@ -1,6 +1,7 @@
 <?php 
 
 namespace Tests;
+use Illuminate\Support\Str;
 
 trait TestHelpers
 {
@@ -8,7 +9,7 @@ trait TestHelpers
     {
         $total = $this->getConnection($connection)->table($table)->count();
         $this->assertSame(0, $total, sprintf(
-            "Failed asserting the table [%s] is empty. %s %s found.", $table, $total, str_plural('row', $total)
+            "Failed asserting the table [%s] is empty. %s %s found.", $table, $total, Str::plural('row', $total)
         ));
     }
 

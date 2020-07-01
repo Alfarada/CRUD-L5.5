@@ -22,6 +22,7 @@ class CreateUserTest extends DuskTestCase
 
         $this->browse(function ( Browser $browser, $browser2, $browser3) use ($profession, $skillA, $skillB) {
             $browser->visit('usuarios/nuevo')
+                ->assertSeeIn('h4','Crear usuario')
                 ->type('name', 'Alfredo')
                 ->type('email', 'hi@example.com')
                 ->type('password', 'laravel')
