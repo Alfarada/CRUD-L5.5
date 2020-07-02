@@ -196,7 +196,7 @@ class UpdateUserTest extends TestCase
         $this->get("/usuarios/{$user->id}/editar")
             ->assertStatus(200)
             ->assertViewIs('users.edit')
-            ->assertSee('Editar Usuario')
+            ->assertSee('Editar usuario')
             ->assertViewHas('user', function ($viewUser) use ($user) {
                 return $viewUser->id === $user->id;
             });

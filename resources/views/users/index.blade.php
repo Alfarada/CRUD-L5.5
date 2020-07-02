@@ -6,10 +6,8 @@
 
 	<div class="d-flex justify-content-between aling-items-end mb-2">
 		<h1 class="pb-1">{{ $title }}</h1>
-
-		<P>
-			<a href="{{ route('users.create') }} " class="btn btn-primary"> Nuevo usuario </a>
-		</P>
+		<P><a 	href="{{ route('users.create') }} "
+				class="btn btn-primary"> Nuevo usuario </a></P>
 	</div>		
 	
 
@@ -33,9 +31,12 @@
 				<form action="{{ route('users.destroy', $user)}} " method="POST">
 					{{ csrf_field() }}
 					{{ method_field('DELETE') }}
-					<a href="{{ route('users.show', $user) }} " class="btn btn-link"><span class="oi oi-eye"></span></a> 
-					<a href="{{ route('users.edit', $user) }} " class="btn btn-link"><span class="oi oi-pencil"></span></a> 
-					<button type="submit" class="btn btn-link"><span class="oi oi-trash"></span></button>
+					<a 	href="{{ route('users.show', $user) }} "
+						class="btn btn-link"><span class="oi oi-eye"></span></a> 
+					<a 	href="{{ route('users.edit', $user) }} "
+						class="btn btn-link"><span class="oi oi-pencil"></span></a> 
+					<button type="submit"
+							class="btn btn-link"><span class="oi oi-trash"></span></button>
 				</form>
 			</td>
 		  </tr>
