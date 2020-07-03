@@ -11,7 +11,9 @@
 	@include('shared._errors')	{{-- errors_list --}}
 
 	<form method="POST" action="{{ url('usuarios') }} ">
-		@include('users._fields')	{{-- Fields--}}
+		
+		@render('UserFields', ['user' => $user])
+
 		<div class="form-group mt-4">
 			<button type="submit" class="btn btn-primary">
 				Crear Usuario
