@@ -9,7 +9,6 @@
          processIsolation="false"
          stopOnFailure="false"
          printerClass="NunoMaduro\Collision\Adapters\Phpunit\Printer">
-         <!--  -->
     <testsuites>
         <testsuite name="Feature">
             <directory suffix="Test.php">./tests/Feature</directory>

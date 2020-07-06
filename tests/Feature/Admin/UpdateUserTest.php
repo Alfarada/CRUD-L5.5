@@ -204,7 +204,7 @@ class UpdateUserTest extends TestCase
 
     /** @test */
     function it_updates_a_new_user()
-    {
+    {   
         $user = factory(User::class)->create();
 
         $this->get("/usuarios/{$user->id}/editar") // usuarios/5/editar
@@ -272,6 +272,20 @@ class UpdateUserTest extends TestCase
         ]);
     }
 
+    /** @test */
+    function it_detaches_all_the_skills_if_none_is_checked()
+    {
+        $user = factory(User::class)->create();
+
+        $oldSkill1 = factory(Skill::class)->create();
+        $oldSkill2 = factory(Skill::class)->create();
+        $user->skills()->attach([$oldSkill1->id, $oldSkill2->id]);
+
+        $this->put("/usuarios/{$user->id}", $this->withData([])
+            )->assertRedirect("/usuarios/{$user->id}");
+
+        $this->assertDatabaseEmpty('user_skill');
+    }
 
     /** @test */
     function the_name_is_required()
