@@ -18,38 +18,45 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user)],
+            'email' => [
+                'required', 'email',
+                Rule::unique('users')->ignore($this->user)
+            ],
             'password' => '',
-            'role' => [ Rule::in(Role::getList())],
+            'role' => [Rule::in(Role::getList())],
             'bio' => 'required',
-            'twitter' => ['nullable','present','url'],
+            'twitter' => ['nullable', 'present', 'url'],
             'profession_id' => [
-                'nullable','present',
+                'nullable', 'present',
                 Rule::exists('professions', 'id')->whereNull('deleted_at')
             ],
             'skills' => [
                 'array',
                 Rule::exists('skills', 'id')
-                ]
+            ]
         ];
     }
 
     public function updateUser(User $user)
-    {   
-        $data = $this->validated();
+    {
+        $user->forceFill([
+            'name' => $this->name,
+            'email' => $this->email,
+            'role' => $this->role
+        ]);
 
-        if ($data['password'] != null) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
+        if ($this->password != null) {
+            $user->password = bcrypt($this->password);
         }
-
-        $user->fill($data);
-        $user->role = $data['role'];
+        
         $user->save();
 
-        $user->profile->update($data);
+        $user->profile->update([
+            'twitter' => $this->twitter,
+            'bio' => $this->bio,
+            'profession_id' => $this->profession_id
+        ]);
 
-        $user->skills()->sync($data['skills'] ?? []);
+        $user->skills()->sync($this->skills ?: []);
     }
 }

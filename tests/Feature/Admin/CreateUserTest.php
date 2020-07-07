@@ -26,11 +26,6 @@ class CreateUserTest extends TestCase
     {   
         $this->withoutExceptionHandling();
 
-        $profession = factory(Profession::class)->create();
-
-        $skillA = factory(Skill::class)->create();
-        $skillB = factory(Skill::class)->create();
-
         $this->get('/usuarios/nuevo')
             ->assertStatus(200)
             ->assertSee('Crear Usuario');
@@ -38,7 +33,7 @@ class CreateUserTest extends TestCase
 
     /** @test */
     function it_creates_a_new_user()
-    {
+    {   
         $profession = factory(Profession::class)->create();
 
         $skillA = factory(Skill::class)->create();

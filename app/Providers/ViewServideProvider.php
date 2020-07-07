@@ -16,7 +16,7 @@ class ViewServideProvider extends ServiceProvider
      */
     public function register()
     {
-        Blade::component('shared._card','card');
+        Blade::component('shared._card');
         View::composer('users._fields', UsersFieldsComposer::class);
         Blade::directive('render', function ($expression) {
 

@@ -36,3 +36,10 @@ Route::put('/usuarios/{user}', 'UserController@update');
 Route::delete('/usuarios/{user}', 'UserController@destroy')
 		->name('users.destroy');
 
+// Profile
+Route::get('/editar-perfil/', 'ProfileController@edit');
+
+Route::put('/editar-perfil/', 'ProfileController@update');
+
+
+
